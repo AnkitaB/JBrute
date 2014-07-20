@@ -1,0 +1,154 @@
+Change log:
+-----------
+
+v0.99:
+	Date: 09/11/2013
+	-----
+	Fixes:
+	------
+	 	_ Try-catch block in rule application (to still cracking if an error happends...)
+	 	_ Bug on dictionary decryption method with memory commands on rules (not thread-safe)
+	 	_ Output of actual processing rule for dictionary decryption method (estimative).
+	 	_ Improve performance for ":" default rule (avoid innecessary validations)
+	 	_ Avoid decrypting duplicated hashes in hashfile
+	 	
+
+	New Functionalities:
+	--------------------
+		_ New ".pandora.box" file to persist decryptions for future sessions.
+			(you can remove it before start decryption if you want to)
+
+v0.98:
+	Date: 06/11/2013
+	-----
+	Fixes:
+	------
+	 	_ Bug on "c" command with words of length 0.
+	 	_ Bug on "'" command (now it recognize supported numeric constants)
+	 	_ Bug on "T" command (now it recognize supported numeric constants)
+	 	_ Bug on dictionary decryption of chained algorithms with no salt usage.
+	 	_ Bug on brute force decryption of chained algorithms (all scenarios...).
+
+	New Functionalities:
+	--------------------
+		_ Numeric constant "l" support in rule processor.
+		_ Numeric constant "m" support in rule processor.
+		_ Numeric constants "A..Z" (for 10..35) support in rule processor.
+		_ Added support for "X" memory access command in rule processor.
+	
+v0.97:
+	Date: 29/10/2013
+	-----
+	Fixes:
+	------
+	 	_ Performance drastically improved for chained algorithms with lowercase/uppercase intermediate
+	 		hashes (almost same performance as raw intermediate hashes).
+	 	_ Same performance now for lowercase and uppercase intermediate hashes.		
+	 	_ Bug in brute force decryption with multi-threading (not update decryptions between threads).
+	 	_ Time for "--test" main parameter is 5 seconds by default.
+
+	New Functionalities:
+	--------------------
+		_ New optional parameter "--base64" for main parameter "--encrypt".
+		_ New optional parameter "--salt_type" for main parameter "--encrypt".
+		_ New optional parameter "--salt_type" for main parameter "--decrypt".
+		_ New optional parameter "--hashcount" for main parameter "--test".
+		_ New optional parameter "--salt" for main parameter "--test".
+		_ New algorithm supported: INFORMIX-1170
+		_ New format for hashfile: it supports multiple salts (one per hash), and salt types.
+		_ Multi-threading support for dictionary decryption method (printing less information about rules processing).
+		_ Added default name "rules.txt" to "--rule_file" optional parameter (for shortest commands).
+		_ Added default name "wordlist.txt" to "--dict_file" optional parameter (for shortest commands).
+		_ Added file "rules.txt" with default rules as examples.
+		_ Added support for "M" and "Q" memory access commands to rule processing.
+		_ Rule processing now has order, from left to right, and JBrute process it as is written.
+		
+v0.96:
+	Date: 08/10/2013
+	-----
+	Fixes:
+	------
+	 	_ Bug on "--test --threads=X" with any algorithm.
+	 	_ More syntax details of available parameters in "--help" main parameter.
+	 	_ Bug on "--hashfile" optional parameter for "--decrypt" main parameter.
+	 	_ "--hashfile" optional parameter for "--decrypt" main parameter now is called "--hash_file"
+	 		to mantain a standarization on file related parameters.	
+	 		
+
+	New Functionalities:
+	--------------------
+		_ New optional parameter "--time" for "--test" main parameter, to specify in seconds
+			how much time JBrute can test performance for an algorithm.
+		_ "--encrypt" main parameter now works for all supported algorithms (even chained algorithms).
+		_ New "--guess" main parameter for guess algorithm for a hash (or several hashes via --hash_file).	
+		_ Now "--algorithm" optional parameter for "--decrypt" main parameter is optional. If it is not
+			passed, then JBrute will try to identify the algorithm analyzing the hash.
+	
+v0.95:
+	Date: 26/09/2013
+	-----
+	Fixes:
+	------
+	 	_ "--test --algorithm=A" working now.
+	 	_ Changes in Oracle11g.java class, using constants now (syntax issues).
+	 	_ Performance improved for NTLM algorithm (50% faster).
+	 	_ Performance improved for MSSQL-2000 algorithm (20% faster).
+	 	_ Performance improved for MSSQL-2005 algorithm (15% faster).
+	 	_ Performance improved for MSSQL-2012 algorithm (15% faster).
+	 	_ Performance improved for SYBASE-ASE1502 algorithm (5% faster).	
+
+	New Functionalities:
+	--------------------
+		_ Partial mask support for rule pre-processor. Available masks only on '$' and '^' simple commands:
+			- a-z, A-Z, 0-9, a-z0-9, a-zA-z, A-Z0-9, a-zA-Z0-9
+			- custom masks (ex: [arx], [789])
+		_ New insert/delete commands supported: '[', ']' and 'DN' (no need to escape from '[' or ']')	 	
+ 
+v0.94:
+	Date: 19/09/2013
+	-----
+	Fixes:
+	------
+		_ Performance improved dramatically (around 900%) for dictionary decryption method (all rules). Now I am using StringBuilders instead 
+			Strings in the rule preprocessor (DictionaryRulePreProcessor class).
+		_ Performance improved for Rule Action "V".
+		_ Performance improved for Rule Action "R".
+		_ Performance improved for Rule Action "t".
+		_ Parameter "--stdout" for dictionary decryption is working now.
+		_ Wrong reject result with complementary character classes in "%" reject condition.
+	
+v0.93:
+	Date: 11/09/2013
+	-----
+	Fixes:
+	------
+		_ Error in encrypt main parameter with chained case (wrong encryption in chained algorithms with non-default case)
+		_ Default character set changed to "loweralpha".
+		_ Now JBrute notifies you if it is using the default character set.
+		_ Error if format of Oracle10g hash is incorrect.
+		_ Error if format of PostgreSQL hash is incorrect.
+		_ Error if format of MSSQL-2000 hash is incorrect.
+		_ Error if format of MSSQL-2005 hash is incorrect.
+		_ Error if format of MSSQL-2012 hash is incorrect.
+		_ Improve performance on MYSQL-411 algorithm (3 times faster than last implementation).
+		_ Changed MYSQL-411 hash format: you must not specify the '*' character at the beginning of the hash.
+		_ Format of number of hashes per second in test mode changed. If number > 1000000, the last 3 digits will be replaced
+			with the "K" character. (so: 2500000 would be 2500K).	
+		_ Improve performance for hashed special algorithms (by SpecialAlgorithm class and MyMEssageDigest class).	
+		_ Correct Sybase name algorithm (before JBrute knows it as SYSBASE-1502, now is SYBASE-ASE1502).
+		_ Correct minor bug about case of username (salt) in POSTGRESQL algorithm.
+		_ Correct error when trying to decrypt a MD5CRYPT hash (both brute and dictionary methods).		
+	
+	New Functionalities:
+	--------------------
+		_ New main parameter "--expected", that shows examples of the formats expected for each supported algorithm.
+	
+v0.92:
+	Date: 04/09/2013
+	-----
+	Fixes:
+	------
+		
+	New Functionalities: 
+	--------------------
+		_ First version launched.
